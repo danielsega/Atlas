@@ -34,8 +34,8 @@ void AAtlasPlayerController::SetupInputComponent()
 	InputComponent->BindAction("SetDestination", IE_Pressed, this, &AAtlasPlayerController::OnSetDestinationPressed);
 	InputComponent->BindAction("SetDestination", IE_Released, this, &AAtlasPlayerController::OnSetDestinationReleased);
 	//--Left Click
-	InputComponent->BindAction("Select", IE_Pressed, this, &AAtlasPlayerController::OnSetDestinationPressed);
-	InputComponent->BindAction("Select", IE_Released, this, &AAtlasPlayerController::OnSetDestinationReleased);
+	InputComponent->BindAction("Select", IE_Pressed, this, &AAtlasPlayerController::OnSelectPressed);
+	InputComponent->BindAction("Select", IE_Released, this, &AAtlasPlayerController::OnSelectReleased);
 	//--WheelUp
 	InputComponent->BindAction("ZoomCamaraUp", IE_Pressed, this, &AAtlasPlayerController::OnZoomCameraUpPressed);
 	InputComponent->BindAction("ZoomCamaraUp", IE_Released, this, &AAtlasPlayerController::OnZoomCameraUpReleased);
