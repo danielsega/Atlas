@@ -1,4 +1,4 @@
-// Atlas - Daniel Sega Mattos.
+// Atlas - Daniel Sega Mattos
 
 #pragma once
 
@@ -11,7 +11,7 @@
 UCLASS()
 class ATLAS_API AAtlasHUD : public AHUD
 {
-	GENERATED_BODY()	
-	
-	
+	GENERATED_BODY()
+
+		virtual void DrawHUD() override;
 };
