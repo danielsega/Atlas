@@ -12,6 +12,9 @@ public:
 	AAtlasPlayerController(const FObjectInitializer& ObjectInitializer);
 
 protected:
+	/** If the mouse is being click and dragged*/
+	bool isSelectBoxBeingDragged;
+
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
 
@@ -22,9 +25,6 @@ protected:
 
 	/** Navigate player to the current mouse cursor location. */
 	void MoveToMouseCursor();
-
-	/** Navigate player to the current touch location. */
-	void MoveToTouchLocation(const ETouchIndex::Type FingerIndex, const FVector Location);
 	
 	/** Navigate player to the given world location. */
 	void SetNewMoveDestination(const FVector DestLocation);
@@ -44,6 +44,25 @@ protected:
 	/** Input handlers for Select action. */
 	void OnZoomCameraDownPressed();
 	void OnZoomCameraDownReleased();
+
+	/**  First Skill Slot*/
+	void OnFirstSkillSlotPressed();
+	void OnFirstSkillSlotReleased();
+
+	/**  Second Skill Slot*/
+	void OnSecondSkillSlotPressed();
+	void OnSecondSkillSlotReleased();
+
+	/**  Third Skill Slot*/
+	void OnThirdSkillSlotPressed();
+	void OnThirdSkillSlotReleased();
+
+	/**  Super Skill Slot*/
+	void OnSuperSkillSlotPressed();
+	void OnSuperSkillSlotReleased();
+
+private:
+	void drawBox();
 };
 
 

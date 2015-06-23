@@ -5,12 +5,23 @@
 #include "AI/Navigation/NavigationSystem.h"
 
 #include "AtlasCharacter.h"
+#include "AtlasHUD.h"
 
 AAtlasPlayerController::AAtlasPlayerController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Crosshairs;
+	isSelectBoxBeingDragged = false;
+}
+
+void AAtlasPlayerController::drawBox()
+{
+	float updateX;
+	float updateY;
+	GetMousePosition(updateX, updateY);
+	AAtlasHUD* const mainHUD = Cast<AAtlasHUD>(GetHUD());
+	mainHUD->SetMouseDragCoor(updateX, updateY);
 }
 
 void AAtlasPlayerController::PlayerTick(float DeltaTime)
@@ -21,6 +32,10 @@ void AAtlasPlayerController::PlayerTick(float DeltaTime)
 	if (bMoveToMouseCursor)
 	{
 		MoveToMouseCursor();
+	}	
+	if (isSelectBoxBeingDragged)
+	{
+		drawBox();
 	}
 }
 
@@ -42,9 +57,6 @@ void AAtlasPlayerController::SetupInputComponent()
 	//--WheelDown
 	InputComponent->BindAction("ZoomCamaraDown", IE_Pressed, this, &AAtlasPlayerController::OnZoomCameraDownPressed);
 	InputComponent->BindAction("ZoomCamaraDown", IE_Released, this, &AAtlasPlayerController::OnZoomCameraDownReleased);
-	// support touch devices 
-	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AAtlasPlayerController::MoveToTouchLocation);
-	InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AAtlasPlayerController::MoveToTouchLocation);
 }
 
 void AAtlasPlayerController::MoveToMouseCursor()
@@ -57,20 +69,6 @@ void AAtlasPlayerController::MoveToMouseCursor()
 	{
 		// We hit something, move there
 		SetNewMoveDestination(Hit.ImpactPoint);
-	}
-}
-
-void AAtlasPlayerController::MoveToTouchLocation(const ETouchIndex::Type FingerIndex, const FVector Location)
-{
-	FVector2D ScreenSpaceLocation(Location);
-
-	// Trace to see what is under the touch location
-	FHitResult HitResult;
-	GetHitResultAtScreenPosition(ScreenSpaceLocation, CurrentClickTraceChannel, true, HitResult);
-	if (HitResult.bBlockingHit)
-	{
-		// We hit something, move there
-		SetNewMoveDestination(HitResult.ImpactPoint);
 	}
 }
 
@@ -104,12 +102,19 @@ void AAtlasPlayerController::OnSetDestinationReleased()
 
 void AAtlasPlayerController::OnSelectPressed()
 {
-	
+	float startX;
+	float startY;
+	GetMousePosition(startX, startY);
+	AAtlasHUD* const mainHUD = Cast<AAtlasHUD>(GetHUD());
+	isSelectBoxBeingDragged = true;
+	mainHUD->MouseDragBoxOn(startX, startY);
 }
 
 void AAtlasPlayerController::OnSelectReleased()
 {
-
+	AAtlasHUD* const mainHUD = Cast<AAtlasHUD>(GetHUD());
+	isSelectBoxBeingDragged = false;
+	mainHUD->MouseDragBoxOff();
 }
 
 void AAtlasPlayerController::OnZoomCameraUpPressed()
